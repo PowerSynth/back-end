@@ -1,27 +1,32 @@
 {
-    "compilerOptions": {
-        "module": "NodeNext",
-        "moduleResolution": "NodeNext",
-        // Import non-ES modules as default imports.
-        "esModuleInterop": true,
-        // Target latest version of ECMAScript.
-        "target": "ES2020",
-        // Process & infer types from .js files.
-        "allowJs": false,
-        // Enable strictNullChecks & noImplicitAny.
-        "strictNullChecks": true,
-        "noImplicitAny": true,
-        "strict": true,
-        "strictFunctionTypes": false,
-        "noImplicitThis": false,
-        // Import .json files
-        "resolveJsonModule": true,
-        "sourceMap": true,
-        "outDir": "build",
-        "baseUrl": ".",
-        "paths": {
-        "*": ["node_modules/*", "src/types/*"]
-        }
-    },
-    "include": ["src/**/*"],
+  "compilerOptions": {
+    "target": "es2018",
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/types"
+    ],
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "pretty": true,
+    "sourceMap": true,
+    "outDir": "./build",
+    "allowJs": true,
+    "noEmit": false,
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": [
+    "./src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "tests"
+  ]
 }
