@@ -90,7 +90,12 @@ web_modules/
 # Next.js build output
 .next
 out
-uploads
+
+# Ignore everything in the uploads folder
+/uploads/*
+
+# But don't ignore the RS_Models directory
+!/uploads/RS_Models
 
 # Nuxt.js build / generate output
 .nuxt
