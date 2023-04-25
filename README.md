@@ -12,7 +12,7 @@ cd back-end
 npm install
 ```
 
-d~~You will also need to set up the environment variables by creating a `.env` file in the root directory of the project. You can copy the contents of `.env.example` and update the values as needed.~~
+~~You will also need to set up the environment variables by creating a `.env` file in the root directory of the project. You can copy the contents of `.env.example` and update the values as needed.~~
 
 ## Running the Server
 
