@@ -1,0 +1,1 @@
+{"version":"1.0.0","name":"back-end","dependencies":{"adm-zip":{"version":"0.5.10"},"express":{"version":"4.18.2"},"multer":{"version":"1.4.5-lts.1"},"stream-zip":{"version":"1.0.6"},"unzipper":{"version":"0.10.11"}}}
