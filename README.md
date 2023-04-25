@@ -26,7 +26,7 @@ The server will start listening on port 3000 by default. You can change this by 
 
 ## API Documentation
 
-### POST /api/powersynth
+### POST /api/power-synth
 
 Uploads a zip file and processes it through PowerSynth.
 
