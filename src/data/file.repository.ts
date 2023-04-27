@@ -1,7 +1,6 @@
 import AdmZip from "adm-zip";
 import path from "path";
 import { IFileRepository } from "../interfaces";
-import { glob } from "glob";
 import fs from "fs";
 
 export class FileRepository implements IFileRepository {
@@ -30,17 +29,35 @@ export class FileRepository implements IFileRepository {
       const zipOutputPath = `${sourceFolderPath}.zip`;
       const zipFile = new AdmZip();
 
-      if (includedPaths.length > 0) {
-         includedPaths.forEach((pattern) => {
-            const files = glob.sync(path.join(sourceFolderPath, pattern));
-            files.forEach((file) => {
-               const relativePath = path.relative(sourceFolderPath, file);
-               zipFile.addLocalFile(file, path.dirname(relativePath));
-            });
+      const walkSync = (dir: string, fileList: string[] = []) => {
+         const files = fs.readdirSync(dir);
+         files.forEach((file) => {
+            const filePath = path.join(dir, file);
+            if (fs.statSync(filePath).isDirectory()) {
+               fileList = walkSync(filePath, fileList);
+            } else {
+               fileList.push(filePath);
+            }
          });
-      } else {
-         zipFile.addLocalFolder(sourceFolderPath);
-      }
+         return fileList;
+      };
+
+      const allFiles = walkSync(sourceFolderPath);
+
+      const filesToAdd =
+         includedPaths.length > 0
+            ? allFiles.filter((file) => {
+                 const relativePath = path.relative(sourceFolderPath, file);
+                 return includedPaths.some((pattern) =>
+                    minimatch(relativePath, pattern)
+                 );
+              })
+            : allFiles;
+
+      filesToAdd.forEach((file) => {
+         const relativePath = path.relative(sourceFolderPath, file);
+         zipFile.addLocalFile(file, path.dirname(relativePath));
+      });
 
       zipFile.writeZip(zipOutputPath);
 
