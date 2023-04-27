@@ -15,6 +15,7 @@ export class PowerSynthController {
 
    async runPowerSynth(filePath: string): Promise<File> {
       try {
+         console.log("Running PowerSynth operation...");
          // Unzip the file
          const file = await this.fileService.unzipFile(filePath);
 

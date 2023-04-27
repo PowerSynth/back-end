@@ -8,12 +8,19 @@ export class FileRepository implements IFileRepository {
       originalNameWithoutExt: string;
       outputFolderPath: string;
    }> {
+      console.log("Extracting zip file...");
       const zip = new AdmZip(filePath);
       const originalNameWithoutExt = path.basename(
          filePath,
          path.extname(filePath)
       );
-      const outputFolderPath = `./uploads/${originalNameWithoutExt}`;
+
+      const outputFolderPath = path.join(
+         __dirname,
+         "../uploads",
+         originalNameWithoutExt
+      );
+
       zip.extractAllTo(outputFolderPath, true);
 
       console.log("Extraction complete!");
