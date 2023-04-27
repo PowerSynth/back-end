@@ -3,5 +3,8 @@ export interface IFileRepository {
       originalNameWithoutExt: string;
       outputFolderPath: string;
    }>;
-   createZipFile(sourceFolderPath: string): Promise<string>;
+   createZipFile(
+      sourceFolderPath: string,
+      includedPaths?: string[]
+   ): Promise<string>;
 }

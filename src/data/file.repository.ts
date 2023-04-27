@@ -23,10 +23,25 @@ export class FileRepository implements IFileRepository {
       };
    }
 
-   async createZipFile(sourceFolderPath: string): Promise<string> {
+   async createZipFile(
+      sourceFolderPath: string,
+      includedPaths: string[] = []
+   ): Promise<string> {
       const zipOutputPath = `${sourceFolderPath}.zip`;
       const zipFile = new AdmZip();
-      zipFile.addLocalFolder(sourceFolderPath);
+
+      if (includedPaths.length > 0) {
+         includedPaths.forEach((pattern) => {
+            const files = glob.sync(path.join(sourceFolderPath, pattern));
+            files.forEach((file) => {
+               const relativePath = path.relative(sourceFolderPath, file);
+               zipFile.addLocalFile(file, path.dirname(relativePath));
+            });
+         });
+      } else {
+         zipFile.addLocalFolder(sourceFolderPath);
+      }
+
       zipFile.writeZip(zipOutputPath);
 
       console.log("Zipping complete!");
