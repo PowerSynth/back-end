@@ -1,6 +1,7 @@
 import AdmZip from "adm-zip";
 import path from "path";
 import { IFileRepository } from "../interfaces";
+import { glob } from "glob";
 
 export class FileRepository implements IFileRepository {
    async extractZipFile(filePath: string): Promise<{
