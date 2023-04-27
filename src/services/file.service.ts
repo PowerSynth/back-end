@@ -4,15 +4,9 @@ import { IFileService } from "../interfaces/IFileService";
 
 export class FileService implements IFileService {
    constructor(private readonly fileRepository: IFileRepository) {}
-
-   async unzipFile(filePath: string): Promise<File> {
-      const { originalNameWithoutExt, outputFolderPath } =
-         await this.fileRepository.extractZipFile(filePath);
-
-      return {
-         originalNameWithoutExt,
-         outputFolderPath,
-      };
+   async unzipFile(filePath: string): Promise<string> {
+      const folderPath = await this.fileRepository.extractZipFile(filePath);
+      return folderPath;
    }
 
    async zipFile(

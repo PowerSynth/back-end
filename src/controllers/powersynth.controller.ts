@@ -1,10 +1,9 @@
-import { Request } from "express";
 import {
    IPowerSynthService,
    IFileService,
    ILoggerService,
 } from "../interfaces";
-import { File } from "../models";
+import { Path } from "typescript";
 
 export class PowerSynthController {
    constructor(
@@ -13,31 +12,27 @@ export class PowerSynthController {
       private readonly loggerService: ILoggerService
    ) {}
 
-   async runPowerSynth(filePath: string): Promise<File> {
+   async runPowerSynth(filePath: string): Promise<string> {
       try {
          console.log("Running PowerSynth operation...");
          // Unzip the file
-         const file = await this.fileService.unzipFile(filePath);
+         const folderPath = await this.fileService.unzipFile(filePath);
 
          // Run the PowerSynth script
-         await this.powerSynthService.runScript(file.outputFolderPath);
+         await this.powerSynthService.runScript(folderPath);
 
          // Create a zip file of the output folder
-         const outputZipPath = await this.fileService.zipFile(
-            file.outputFolderPath,
-            ["Solutions/**/*", "macro_script.txt"]
-         );
+         const outputZipPath = await this.fileService.zipFile(folderPath, [
+            "Solutions/**/*",
+            "macro_script.txt",
+         ]);
 
          // Log successful operation
          this.loggerService.log(
-            `PowerSynth operation on file ${file.originalNameWithoutExt} was successful`
+            `PowerSynth operation on file ${folderPath} was successful`
          );
-
-         return {
-            originalNameWithoutExt: file.originalNameWithoutExt,
-            outputFolderPath: file.outputFolderPath,
-            zipPath: outputZipPath,
-         };
+         // Return outputzip path as Path
+         return outputZipPath;
       } catch (err) {
          // Log error
          this.loggerService.error(

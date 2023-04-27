@@ -1,8 +1,5 @@
 export interface IFileRepository {
-   extractZipFile(filePath: string): Promise<{
-      originalNameWithoutExt: string;
-      outputFolderPath: string;
-   }>;
+   extractZipFile(filePath: string): Promise<string>;
    createZipFile(
       sourceFolderPath: string,
       includedPaths?: string[]

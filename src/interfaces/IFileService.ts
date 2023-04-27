@@ -1,6 +1,4 @@
-import { File } from "../models";
-
 export interface IFileService {
-   unzipFile(filePath: string): Promise<File>;
+   unzipFile(filePath: string): Promise<string>;
    zipFile(sourceFolderPath: string, includedPaths?: string[]): Promise<string>;
 }

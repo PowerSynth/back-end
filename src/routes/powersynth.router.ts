@@ -22,13 +22,26 @@ const powerSynthController = new PowerSynthController(
 );
 
 const router = Router();
-const upload = multer({ dest: "uploads/" });
+
+const storage = multer.diskStorage({
+   destination: function (req, file, cb) {
+      cb(null, "./src/uploads/");
+   },
+   filename: function (req, file, cb) {
+      cb(null, file.originalname);
+   },
+});
+
+const upload = multer({
+   storage: storage,
+   limits: { fileSize: 1024 * 1024 * 10 },
+});
 
 router.post("/", upload.single("file"), async (req, res) => {
    try {
       const filePath = req.file.path;
       const result = await powerSynthController.runPowerSynth(filePath);
-      res.download(result.outputFolderPath);
+      res.download(result);
    } catch (err) {
       console.error(err);
       res.status(500).json({ message: "Internal server error" });

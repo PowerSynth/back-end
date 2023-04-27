@@ -2,33 +2,25 @@ import AdmZip from "adm-zip";
 import path from "path";
 import { IFileRepository } from "../interfaces";
 import { glob } from "glob";
+import fs from "fs";
 
 export class FileRepository implements IFileRepository {
-   async extractZipFile(filePath: string): Promise<{
-      originalNameWithoutExt: string;
-      outputFolderPath: string;
-   }> {
-      console.log("Extracting zip file...");
+   async extractZipFile(filePath: string): Promise<string> {
+      // Log where the file is being extracted
+      console.log(`Extracting file ${filePath}...`);
       const zip = new AdmZip(filePath);
-      const originalNameWithoutExt = path.basename(
-         filePath,
-         path.extname(filePath)
-      );
-
-      const outputFolderPath = path.join(
-         __dirname,
-         "../uploads",
-         originalNameWithoutExt
-      );
-
-      zip.extractAllTo(outputFolderPath, true);
-
+      // Extract file to its current directory
+      zip.extractAllTo(path.dirname(filePath), true);
       console.log("Extraction complete!");
 
-      return {
-         originalNameWithoutExt,
-         outputFolderPath,
-      };
+      // Log deleting the zip file
+      console.log(`Deleting file ${filePath}...`);
+
+      // Delete the zip file
+      fs.unlinkSync(filePath);
+
+      // return path to the extracted folder
+      return path.join(path.dirname(filePath), path.basename(filePath, ".zip"));
    }
 
    async createZipFile(
