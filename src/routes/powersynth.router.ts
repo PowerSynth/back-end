@@ -10,9 +10,8 @@ import {
 import { FileService } from "../services";
 import { LoggerService } from "../services/logger.service";
 import { PowerSynthService } from "../services/powersynth.service";
-import { FileRepository } from "../data";
 
-const fileService: IFileService = new FileService(new FileRepository());
+const fileService: IFileService = new FileService();
 const loggerService: ILoggerService = new LoggerService();
 const powerSynthService: IPowerSynthService = new PowerSynthService();
 
@@ -26,7 +25,7 @@ const router = Router();
 
 const storage = multer.diskStorage({
    destination: function (req, file, cb) {
-      cb(null, "./src/uploads/");
+      cb(null, "./uploads/");
    },
    filename: function (req, file, cb) {
       cb(null, file.originalname);
@@ -35,16 +34,20 @@ const storage = multer.diskStorage({
 
 const upload = multer({
    storage: storage,
-   limits: { fileSize: 1024 * 1024 * 10 },
+   limits: { fileSize: 1024 * 1024 * 30 },
 });
 
 router.post("/", upload.single("file"), async (req, res) => {
    try {
-      const filePath = req.file.path;
-      const result = await powerSynthController.runPowerSynth(filePath);
-      const absolutePath = path.resolve(result);
-      console.log(absolutePath);
-      res.sendFile(absolutePath);
+      // Run the PowerSynth operation
+      const zipBuffer = await powerSynthController.runPowerSynth(req.file.path);
+
+      // Set headers for the response
+      res.setHeader('Content-Type', 'application/zip');
+      res.setHeader('Content-Disposition', 'attachment; filename=result.zip');
+
+      // Send the buffer as a response
+      res.send(zipBuffer);
    } catch (err) {
       console.error(err);
       res.status(500).json({ message: "Internal server error" });

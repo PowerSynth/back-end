@@ -30,16 +30,13 @@
     "helmet": "^6.1.5",
     "http-proxy": "^1.18.1",
     "morgan": "^1.10.0",
-    "multer": "^1.4.5-lts.1",
-    "stream-zip": "^1.0.6",
-    "unzipper": "^0.10.11"
+    "multer": "^1.4.5-lts.1"
   },
   "devDependencies": {
     "@types/adm-zip": "^0.5.0",
     "@types/express": "^4.17.17",
     "@types/multer": "^1.4.7",
     "@types/node": "^18.15.12",
-    "@types/unzipper": "^0.10.5",
     "nodemon": "^2.0.22",
     "prettier": "^2.8.8",
     "rimraf": "^5.0.0",
