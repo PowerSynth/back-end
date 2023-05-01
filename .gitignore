@@ -92,7 +92,7 @@ web_modules/
 out
 
 # Ignore everything in the uploads folder
-/uploads/*
+/src/uploads/*
 
 # But don't ignore the RS_Models directory
 !/uploads/RS_Models

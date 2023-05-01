@@ -1,5 +1,6 @@
 import { Router } from "express";
 import multer from "multer";
+import path from "path";
 import { PowerSynthController } from "../controllers";
 import {
    ILoggerService,
@@ -41,7 +42,9 @@ router.post("/", upload.single("file"), async (req, res) => {
    try {
       const filePath = req.file.path;
       const result = await powerSynthController.runPowerSynth(filePath);
-      res.download(result);
+      const absolutePath = path.resolve(result);
+      console.log(absolutePath);
+      res.sendFile(absolutePath);
    } catch (err) {
       console.error(err);
       res.status(500).json({ message: "Internal server error" });

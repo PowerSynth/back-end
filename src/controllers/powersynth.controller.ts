@@ -22,10 +22,7 @@ export class PowerSynthController {
          await this.powerSynthService.runScript(folderPath);
 
          // Create a zip file of the output folder
-         const outputZipPath = await this.fileService.zipFile(folderPath, [
-            "Solutions/**/*",
-            "macro_script.txt",
-         ]);
+         const outputZipPath = await this.fileService.zipFile(folderPath);
 
          // Log successful operation
          this.loggerService.log(

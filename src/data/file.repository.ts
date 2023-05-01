@@ -26,38 +26,11 @@ export class FileRepository implements IFileRepository {
       sourceFolderPath: string,
       includedPaths: string[] = []
    ): Promise<string> {
+      // Log zipping the file
+      console.log(`Zipping file ${sourceFolderPath}...`);
       const zipOutputPath = `${sourceFolderPath}.zip`;
       const zipFile = new AdmZip();
-
-      const walkSync = (dir: string, fileList: string[] = []) => {
-         const files = fs.readdirSync(dir);
-         files.forEach((file) => {
-            const filePath = path.join(dir, file);
-            if (fs.statSync(filePath).isDirectory()) {
-               fileList = walkSync(filePath, fileList);
-            } else {
-               fileList.push(filePath);
-            }
-         });
-         return fileList;
-      };
-
-      const allFiles = walkSync(sourceFolderPath);
-
-      const filesToAdd =
-         includedPaths.length > 0
-            ? allFiles.filter((file) => {
-                 const relativePath = path.relative(sourceFolderPath, file);
-                 return includedPaths.some((pattern) =>
-                    minimatch(relativePath, pattern)
-                 );
-              })
-            : allFiles;
-
-      filesToAdd.forEach((file) => {
-         const relativePath = path.relative(sourceFolderPath, file);
-         zipFile.addLocalFile(file, path.dirname(relativePath));
-      });
+      zipFile.addLocalFolder(sourceFolderPath);
 
       zipFile.writeZip(zipOutputPath);
 

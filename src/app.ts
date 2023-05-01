@@ -1,12 +1,15 @@
 import express from "express";
 import helmet from "helmet";
 import morgan from "morgan";
+import httpProxy from "http-proxy";
+import cors from "cors";
 import { AppConfig } from "./types";
 import { powerSynthRouter } from "./routes/powersynth.router";
 
 class App {
    public express: express.Application;
    public config: AppConfig;
+   private proxy: httpProxy;
 
    constructor(config: AppConfig) {
       this.express = express();
@@ -21,10 +24,11 @@ class App {
       this.express.use(express.json());
       this.express.use(helmet());
       this.express.use(morgan("dev"));
+      this.express.use(cors());
    }
 
    private initRoutes(): void {
-      this.express.use("/power-synth", powerSynthRouter);
+      this.express.use("/ps2/api/power-synth", powerSynthRouter);
    }
 
    private initErrorHandling(): void {
